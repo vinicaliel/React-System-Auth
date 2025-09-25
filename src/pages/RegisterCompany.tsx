@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { isValidCNPJ, isValidEmail, isValidName, isValidPassword, confirmEquals, hasLength, onlyDigits } from '../utils/validation'
+import { maskPhoneBR, maskCNPJ } from '../utils/masks'
 
 export default function RegisterCompany() {
     const [form, setForm] = useState({
         name: '',
         email: '',
+        confirmEmail: '',
         password: '',
         documentNumber: '',
         confirmPassword: '',
@@ -19,7 +22,10 @@ export default function RegisterCompany() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+        let nextValue = value
+        if (name === 'phone') nextValue = maskPhoneBR(value)
+        if (name === 'documentNumber') nextValue = maskCNPJ(value)
+        setForm(prev => ({ ...prev, [name]: nextValue }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -27,21 +33,28 @@ export default function RegisterCompany() {
         setError(null);
         setSuccess(null);
 
-        if (!form.name || !form.email || !form.password || !form.documentNumber || !form.phone || !form.address || !form.confirmPassword) {
+        if (!form.name || !form.email || !form.confirmEmail || !form.password || !form.documentNumber || !form.phone || !form.address || !form.confirmPassword) {
             setError('Todos os campos são obrigatórios');
             return;
         }
 
-        if (form.password !== form.confirmPassword) {
-            setError('As senhas não coincidem');
-            return;
-        }
+        // Validações específicas
+        if (!isValidName(form.name)) return setError('Nome inválido');
+        if (!isValidEmail(form.email)) return setError('Email inválido');
+        if (!confirmEquals(form.email, form.confirmEmail)) return setError('Confirmação de e-mail não confere');
+        if (!isValidPassword(form.password)) return setError('Senha deve ter 8+ caracteres, 1 maiúscula, 1 número e 1 especial');
+        if (!confirmEquals(form.password, form.confirmPassword)) return setError('As senhas não coincidem');
+        if (!isValidCNPJ(form.documentNumber)) return setError('CNPJ inválido');
+        if (!hasLength(form.phone, 10, 15)) return setError('Telefone deve ter entre 10 e 15 caracteres');
+        if (!hasLength(form.address, 5)) return setError('Endereço muito curto');
 
         setLoading(true);
         try {
             const url = '/api/auth/register/company';
             await axios.post(url, {
                 ...form,
+                phone: onlyDigits(form.phone),
+                documentNumber: onlyDigits(form.documentNumber),
                 userType: form.userType,
             });
             setSuccess('Empresa registrada com sucesso');
@@ -58,6 +71,7 @@ export default function RegisterCompany() {
 
             <input type="text" name="name" placeholder="Razão social / Nome" value={form.name} onChange={handleChange} />
             <input type="text" name="email" placeholder="Email" value={form.email} onChange={handleChange} />
+            <input type="text" name="confirmEmail" placeholder="Confirmar email" value={form.confirmEmail} onChange={handleChange} />
             <input type="password" name="password" placeholder="Senha" value={form.password} onChange={handleChange} />
             <input type="password" name="confirmPassword" placeholder="Confirmar senha" value={form.confirmPassword} onChange={handleChange} />
             <input type="text" name="documentNumber" placeholder="CNPJ / Documento" value={form.documentNumber} onChange={handleChange} />
