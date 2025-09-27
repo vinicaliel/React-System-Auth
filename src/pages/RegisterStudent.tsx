@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 import { isValidCPF, isValidEmail, isValidName, isValidPassword, confirmEquals, hasLength, onlyDigits } from '../utils/validation'
 import { maskCPF, maskPhoneBR } from '../utils/masks'
+import '../styles/register.css'
 
 export default function RegisterStudent() {
     const [form, setForm] = useState({
@@ -18,9 +20,8 @@ export default function RegisterStudent() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         let nextValue = value
         if (name === 'documentNumber') nextValue = maskCPF(value)
@@ -31,7 +32,6 @@ export default function RegisterStudent() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        setSuccess(null);
 
         if (!form.name || !form.email || !form.confirmEmail || !form.password || !form.documentNumber || !form.phone || !form.address || !form.confirmPassword) {
             setError('Todos os campos são obrigatórios');
@@ -57,7 +57,7 @@ export default function RegisterStudent() {
                 phone: onlyDigits(form.phone),
                 userType: form.userType,
             });
-            setSuccess('Estudante registrado com sucesso');
+            setError('Estudante registrado com sucesso');
         } catch (error: any) {
             setError(error?.response?.data?.message ?? 'Ocorreu um erro ao registrar o estudante');
         } finally {
@@ -66,22 +66,130 @@ export default function RegisterStudent() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Cadastro de estudante</h1>
-
-            <input type="text" name="name" placeholder="Nome" value={form.name} onChange={handleChange} />
-            <input type="text" name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-            <input type="text" name="confirmEmail" placeholder="Confirmar email" value={form.confirmEmail} onChange={handleChange} />
-            <input type="password" name="password" placeholder="Senha" value={form.password} onChange={handleChange} />
-            <input type="password" name="confirmPassword" placeholder="Confirmar senha" value={form.confirmPassword} onChange={handleChange} />
-            <input type="text" name="documentNumber" placeholder="Número do documento" value={form.documentNumber} onChange={handleChange} />
-            <input type="text" name="phone" placeholder="Telefone" value={form.phone} onChange={handleChange} />
-            <input type="text" name="address" placeholder="Endereço" value={form.address} onChange={handleChange} />
-
-            <button type="submit" disabled={loading}>{loading ? 'Cadastrando...' : 'Cadastrar'}</button>
-
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
-        </form>
-    );
-}
+        <div className="register-page">
+          <div className="register-container">
+            <div className="register-header">
+              <Link to="/" className="back-link">
+                <span className="back-icon">←</span>
+                Voltar
+              </Link>
+              <div className="register-title">
+                <span className="title-icon">👨‍🎓</span>
+                <h1>Cadastro de Estudante</h1>
+              </div>
+            </div>
+    
+            <form className="register-form" onSubmit={handleSubmit}>
+              {error && <div className="error-message">{error}</div>}
+    
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="name">Nome Completo</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Digite seu nome completo"
+                    required
+                  />
+                </div>
+              </div>
+    
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="documentNumber">CPF</label>
+                  <input
+                    type="text"
+                    id="documentNumber"
+                    name="documentNumber"
+                    value={form.documentNumber}
+                    onChange={handleChange}
+                    placeholder="000.000.000-00"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="phone">Telefone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    placeholder="(00) 00000-0000"
+                    required
+                  />
+                </div>
+              </div>
+    
+              <div className="form-row">
+                <div className="form-group full-width">
+                  <label htmlFor="address">Endereço</label>
+                  <textarea
+                    id="address"
+                    name="address"
+                    value={form.address}
+                    onChange={handleChange}
+                    placeholder="Digite seu endereço completo"
+                    rows={3}
+                    required
+                  />
+                </div>
+              </div>
+    
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="seu@email.com"
+                    required
+                  />
+                </div>
+              </div>
+    
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="password">Senha</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Mínimo 6 caracteres"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirmar Senha</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirme sua senha"
+                    required
+                  />
+                </div>
+              </div>
+    
+              <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? 'Cadastrando...' : 'Cadastrar'}
+              </button>
+    
+              <p className="register-link">
+                Já possui conta? <Link to="/login">Fazer login</Link>
+              </p>
+            </form>
+          </div>
+        </div>
+      );
+    };
