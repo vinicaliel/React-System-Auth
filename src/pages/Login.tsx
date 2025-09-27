@@ -39,7 +39,7 @@ export default function Login() {
     }
 
     return (
-        
+
         <div className="login-page">
           <div className="login-container">
             <div className="login-header">
@@ -90,7 +90,7 @@ export default function Login() {
               <div className="login-links">
                 <p>Não possui conta?</p>
                 <div className="register-options">
-                  <Link to="/register/students" className="register-link">
+                  <Link to="/register/student" className="register-link">
                     Cadastrar como Estudante
                   </Link>
                   <Link to="/register/company" className="register-link">

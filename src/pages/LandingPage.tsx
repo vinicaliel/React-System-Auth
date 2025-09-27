@@ -31,7 +31,7 @@ const LandingPage: React.FC = () => {
                 Conectando estudantes e empresas para um futuro mais sustentável.
               </p>
               <div className="hero-buttons">
-                <Link to="/register/students" className="btn btn-primary">
+                <Link to="/register/student" className="btn btn-primary">
                   <span className="btn-icon">👨‍🎓</span>
                   Sou Estudante
                 </Link>
@@ -43,7 +43,7 @@ const LandingPage: React.FC = () => {
             </div>
             <div className="hero-image">
               <div className="solar-panel-graphic">
-                <span className="sun-icon">☀️</span>
+               
                 <div className="panels">
                   <div className="panel"></div>
                   <div className="panel"></div>
@@ -62,17 +62,17 @@ const LandingPage: React.FC = () => {
               <div className="benefit-card">
                 <span className="benefit-icon">🌱</span>
                 <h3>Sustentabilidade</h3>
-                <p>Reduza sua pegada de carbono e contribua para um planeta mais limpo</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
               </div>
               <div className="benefit-card">
                 <span className="benefit-icon">⚡</span>
                 <h3>Economia</h3>
-                <p>Diminua até 95% da sua conta de energia elétrica</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
               </div>
               <div className="benefit-card">
                 <span className="benefit-icon">☀️</span>
                 <h3>Renovável</h3>
-                <p>Fonte de energia inesgotável e abundante no Brasil</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ const LandingPage: React.FC = () => {
               <h2>Pronto para começar?</h2>
               <p>Junte-se à revolução da energia solar no Brasil</p>
               <div className="cta-buttons">
-                <Link to="/register/students" className="btn btn-primary">
+                <Link to="/register/student" className="btn btn-primary">
                   Cadastrar como Estudante
                 </Link>
                 <Link to="/register/company" className="btn btn-outline">

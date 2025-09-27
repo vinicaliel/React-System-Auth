@@ -141,6 +141,16 @@
   font-weight: 500;
 }
 
+.success-message {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  padding: 12px 16px;
+  border-radius: var(--border-radius);
+  border-left: 4px solid #2e7d32;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .register-page {

@@ -21,6 +21,7 @@ export default function RegisterCompany() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -33,6 +34,7 @@ export default function RegisterCompany() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        setSuccess(null);
 
         if (!form.name || !form.email || !form.confirmEmail || !form.password || !form.documentNumber || !form.phone || !form.address || !form.confirmPassword) {
             setError('Todos os campos são obrigatórios');
@@ -58,7 +60,7 @@ export default function RegisterCompany() {
                 documentNumber: onlyDigits(form.documentNumber),
                 userType: form.userType,
             });
-            setError('Empresa registrada com sucesso');
+            setSuccess('Empresa registrada com sucesso');
         } catch (error: any) {
             setError(error?.response?.data?.message ?? 'Ocorreu um erro ao registrar a empresa');
         } finally {
@@ -82,6 +84,7 @@ export default function RegisterCompany() {
     
             <form className="register-form" onSubmit={handleSubmit}>
               {error && <div className="error-message">{error}</div>}
+              {success && <div className="success-message">{success}</div>}
     
               <div className="form-row">
                 <div className="form-group">
@@ -150,6 +153,18 @@ export default function RegisterCompany() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="contato@empresa.com"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="confirmEmail">Confirmar Email</label>
+                  <input
+                    type="email"
+                    id="confirmEmail"
+                    name="confirmEmail"
+                    value={form.confirmEmail}
+                    onChange={handleChange}
+                    placeholder="confirme@empresa.com"
                     required
                   />
                 </div>
